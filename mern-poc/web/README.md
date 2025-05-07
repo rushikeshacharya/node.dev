@@ -6,4 +6,6 @@
     - React
     - TailwindCSS
     - DaisyUI
+    - react-router
+    - 
  
