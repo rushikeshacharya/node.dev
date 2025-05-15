@@ -14,7 +14,6 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      console.log("Inside handleLogin");
 
       const res = await axios.post(
         `${BASE_URL}/login`,
@@ -24,7 +23,6 @@ const Login = () => {
         },
         { withCredentials: true }
       );
-      console.log("REs", res.data);
       dispatch(addUser(res.data));
       return navigate("/");
     } catch (error) {
