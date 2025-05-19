@@ -32,13 +32,13 @@ const UserCard = ({ user }) => {
             className="btn btn-primary"
             onClick={() => handleSendRequest("ignored", _id)}
           >
-            👎
+            👎 Ignore
           </button>
           <button
             className="btn btn-secondary"
             onClick={() => handleSendRequest("interested", _id)}
           >
-            👍
+            👍 Interested
           </button>
         </div>
       </div>

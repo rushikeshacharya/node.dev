@@ -13,6 +13,8 @@ const EditProfile = ({ user }) => {
   const [gender, setGender] = useState(user.gender || "");
   const [about, setAbout] = useState(user.about || "");
   const [error, setError] = useState("");
+  const [skills, setSkills] = useState(user.skills || "");
+
   const dispatch = useDispatch();
   const [showToast, setShowToast] = useState(false);
 
@@ -114,6 +116,18 @@ const EditProfile = ({ user }) => {
                     value={about}
                     className="input input-bordered w-full max-w-xs"
                     onChange={(e) => setAbout(e.target.value)}
+                  />
+                </label>
+
+                <label className="form-control w-full max-w-xs my-2">
+                  <div className="label">
+                    <span className="label-text">Skills:</span>
+                  </div>
+                  <input
+                    type="text"
+                    value={skills}
+                    className="input input-bordered w-full max-w-xs"
+                    onChange={(e) => setSkills(e.target.value)}
                   />
                 </label>
               </div>
