@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 
 const Chat = () => {
   const { toUserId } = useParams();
@@ -11,12 +12,35 @@ const Chat = () => {
   const user = useSelector((store) => store.user);
   const userId = user?._id;
 
+  const fetchChatMessages = async () => {
+    const chat = await axios.get(`${BASE_URL}/chat/${toUserId}`, {
+      withCredentials: true,
+    });
+
+    const chatMessages = chat?.data?.messages.map((msg) => {
+      const { senderId, text } = msg;
+      return {
+        firstName: senderId?.firstName,
+        lastName: senderId?.lastName,
+        text,
+      };
+    });
+    console.log("Chat Messages: ", chatMessages);
+    
+    setMessages(chatMessages);
+  };
+
+  useEffect(() => {
+    fetchChatMessages();
+    return () => {};
+  }, []);
+
   useEffect(() => {
     if (!userId) {
       return;
     }
     const socket = createSocketConnection();
-    socket.emit("joinChat", { firstName: user.firstName, toUserId, userId });
+    socket.emit("joinChat", { firstName: user.firstName, userId, toUserId });
 
     socket.on("messageReceived", ({ firstName, lastName, text }) => {
       setMessages((messages) => [...messages, { firstName, lastName, text }]);
@@ -34,7 +58,6 @@ const Chat = () => {
     socket.emit("sendMessage", {
       firstName: user.firstName,
       lastName: user.lastName,
-
       userId,
       toUserId,
       text: newMessage,
@@ -49,7 +72,12 @@ const Chat = () => {
         {messages.map((msg, index) => {
           return (
             <div key={index} className={"chat "}>
-              <div className="chat chat-start">
+              <div
+                className={
+                  "chat " +
+                  (user.firstName === msg.firstName ? "chat-end" : "chat-start")
+                }
+              >
                 <div className="chat-image avatar">
                   <div className="w-10 rounded-full">
                     <img
