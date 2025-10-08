@@ -1,2 +1,6 @@
 node_modules
 .env
+var
+# Node.js
+node_modules/
+npm-debug.log*
